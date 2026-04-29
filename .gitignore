@@ -43,3 +43,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# OpenSpec local/spec files
+openspec/
