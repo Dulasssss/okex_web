@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>OKX Paper Trading Dashboard</title>
+  <script>
+    (function () {
+      var ua = navigator.userAgent || "";
+      var touch = navigator.maxTouchPoints || 0;
+      var sw = Math.min(window.innerWidth || 9999, (window.screen && window.screen.width) || 9999);
+      var forced = /[?&]mobile=1(&|$)/.test(window.location.search || "");
+      if (forced || /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(ua) || touch > 1 || sw <= 980) {
+        document.documentElement.classList.add("mobile-layout");
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="/static/style.css?v=20260429-mobile3" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Read-only replay monitor</p>
+      <h1 id="title">OKX BTC/USDT 15m Paper Trading Dashboard</h1>
+      <p class="subtitle">Review paper trading state, trades, equity, BTC close movement and logs. No trading actions are available.</p>
+    </div>
+    <div class="status-pill">
+      <div><span class="muted">Last refresh</span><strong id="last-update">--</strong></div>
+      <div><span class="muted">Last candle</span><strong id="last-candle">--</strong></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="grid cards four" id="account-summary">
+      <article class="card metric"><span>Balance</span><strong id="balance">--</strong></article>
+      <article class="card metric"><span>Equity</span><strong id="equity">--</strong></article>
+      <article class="card metric"><span>Unrealized</span><strong id="unrealized">--</strong></article>
+      <article class="card metric"><span>Last Close</span><strong id="last-close">--</strong></article>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><h2>Trading Stats</h2><span class="muted">from paper_trades.csv</span></div>
+      <div class="grid cards seven">
+        <div class="mini"><span>Total Rows</span><strong id="stat-total">--</strong></div>
+        <div class="mini"><span>OPEN</span><strong id="stat-open">--</strong></div>
+        <div class="mini"><span>ADD</span><strong id="stat-add">--</strong></div>
+        <div class="mini"><span>CLOSE</span><strong id="stat-close">--</strong></div>
+        <div class="mini"><span>Closed PnL</span><strong id="stat-pnl">--</strong></div>
+        <div class="mini"><span>Total Fee</span><strong id="stat-fee">--</strong></div>
+        <div class="mini"><span>Add Fee</span><strong id="stat-add-fee">--</strong></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><h2>Equity Curve</h2><span class="muted">equity + balance</span></div>
+      <div id="equity-chart" class="chart"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><h2>BTC Close Replay</h2><span class="muted">close + OPEN / ADD / CLOSE markers</span></div>
+      <div id="btc-chart" class="chart"></div>
+    </section>
+
+    <section class="trade-lists">
+      <article class="card">
+        <div class="section-title"><h2>Recent Trades</h2><span class="muted">latest 50</span></div>
+        <div id="trades-list" class="record-list"></div>
+      </article>
+      <article class="card">
+        <div class="section-title"><h2>ADD Records</h2><span class="muted">action == ADD</span></div>
+        <div id="adds-list" class="record-list"></div>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="card">
+        <div class="section-title"><h2>Current Position & Risk</h2><span class="muted">from state + latest equity</span></div>
+        <div id="position-grid" class="kv-grid"></div>
+      </article>
+      <article class="card">
+        <div class="section-title"><h2>Latest Indicators</h2><span class="muted">latest equity row</span></div>
+        <div class="kv-grid">
+          <div><span>Signal</span><strong id="signal">--</strong></div>
+          <div><span>ATR</span><strong id="atr">--</strong></div>
+          <div><span>ADX</span><strong id="adx">--</strong></div>
+          <div><span>ADX Weight</span><strong id="adx-weight">--</strong></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><h2>File Health</h2><span class="muted">exists / size / local modified time</span></div>
+      <div class="table-wrap"><table><thead><tr><th>File</th><th>Status</th><th>Size</th><th>Modified</th><th>Path</th></tr></thead><tbody id="file-health"></tbody></table></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><h2>Logs</h2><span class="muted">latest 200 lines</span></div>
+      <pre id="logs" class="logs"></pre>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><h2>Strategy Params</h2><span class="muted">display only</span></div>
+      <div id="strategy-params" class="params-grid"></div>
+    </section>
+  </main>
+
+  <button id="mobile-toggle" class="mobile-toggle" type="button">Mobile View</button>
+  <script src="/static/app.js?v=20260429-mobile3"></script>
+</body>
+</html>
